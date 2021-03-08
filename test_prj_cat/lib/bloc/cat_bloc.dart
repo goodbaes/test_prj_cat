@@ -17,7 +17,8 @@ class CatBloc extends Bloc<CatEvent, CatState> {
     if (event is CatRequested) {
       yield CatLoadInProgress();
       try {
-        final String cat = await new CatApiClient().getImgUrl();
+        final cat = await new CatApiClient().getImgUrl();
+
         yield CatLoadSuccess(catUrl: cat);
       } catch (e) {
         yield CatLoadFailure();

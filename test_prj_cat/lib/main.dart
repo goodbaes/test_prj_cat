@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_prj_cat/bloc/bloc.dart';
@@ -78,9 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         }
         if (state is CatLoadSuccess) {
-          return Center(
-            child: Image.memory(state.catUrl),
-          );
+          return Center(child: Image.memory(state.catUrl));
         }
         if (state is CatLoadFailure) {
           return Text('smth wrong');

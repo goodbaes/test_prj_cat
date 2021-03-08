@@ -1,5 +1,22 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+
+class UrlImg {
+  String url;
+
+  UrlImg({this.url});
+
+  UrlImg.fromJson(Map<String, dynamic> json) {
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['url'] = this.url;
+    return data;
+  }
+}
 
 class CatApiClient {
   final String url =
@@ -8,18 +25,16 @@ class CatApiClient {
     http.Response responsei = await http.get(Uri.parse(imgUrl));
     final bytes = responsei.bodyBytes;
     final bytesEncode = base64Encode(bytes);
-
-    return (bytesEncode != null ? bytesEncode : null);
+    final Uint8List uniList = base64Decode(bytesEncode);
+    return (uniList != null ? uniList : null);
   }
 
   Future getImgUrl() async {
-    http.Response response = await http.get(Uri.parse(url));
+    final http.Response response = await http.get(Uri.parse(url));
     if (response != null) {
-      String data = response.body;
-      var img = jsonDecode(data);
-      String imgUrl = img['url'];
-      var bytesEncode = await getImg(imgUrl);
-      return (bytesEncode != null ? bytesEncode : null);
+      var data = jsonDecode(response.body);
+      var imgBase = getImg(data[0]['url']);
+      return imgBase;
     } else {
       print(response.statusCode);
     }
