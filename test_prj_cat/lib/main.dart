@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('widget.title'),
+        title: Text('Random Cat'),
       ),
       body: BlocBuilder<CatBloc, CatState>(builder: (context, state) {
         if (state is CatInitial) {
@@ -80,16 +80,25 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         }
         if (state is CatLoadSuccess) {
-          return Center(child: Image.memory(state.catUrl));
+          return Center(
+              child: Image.memory(
+            state.catUrl,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            alignment: Alignment.center,
+          ));
         }
         if (state is CatLoadFailure) {
           return Text('smth wrong');
         }
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: () {
+          BlocProvider.of<CatBloc>(context).add(CatRefreshReq());
+        },
+        tooltip: 'Refresh',
+        child: Icon(Icons.refresh),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

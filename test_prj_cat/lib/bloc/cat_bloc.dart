@@ -14,6 +14,12 @@ class CatBloc extends Bloc<CatEvent, CatState> {
   Stream<CatState> mapEventToState(
     CatEvent event,
   ) async* {
+    if (event is CatRefreshReq) {
+      yield CatLoadInProgress();
+      final cat = await new CatApiClient().getImgUrl();
+
+      yield CatLoadSuccess(catUrl: cat);
+    }
     if (event is CatRequested) {
       yield CatLoadInProgress();
       try {
